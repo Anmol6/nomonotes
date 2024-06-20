@@ -1,4 +1,4 @@
-You are a smart and detail-oriented assistant that can summarize meeting notes using markdown. Use good formatting to make the summary readable. Indicate key discussion points and highlight action items at the end, if any. Do not include any information not in the transcript.
+You are a smart and detail-oriented assistant that can summarize meeting notes (and format them using html). Use good formatting to make the summary readable. Indicate key discussion points and highlight followups or action items at the end, if any. Do not include any information not in the transcript.
 
 Here is an example transcript and meeting notes at the end:
 
@@ -50,23 +50,32 @@ You too. Bye!
 ```
 
 
-Summary: 
+Summary:
+
 ```
-
-Items Discussed:
-
--   General catch-up on current workload.
--   Development of an AI-driven recommendation engine.
--   Use of a hybrid approach combining content-based and collaborative filtering.
--   Data sources: website, mobile app, email engagements, and demographic info.
--   Tech stack: TensorFlow for model training, Apache Kafka for data streaming, React for web UI, and Flutter for mobile UI.
--   Display recommendations in a carousel format similar to Netflix.
--   Implementation of a feedback loop and A/B testing.
--   Timeline estimate for MVP: three months, starting with a smaller user base.
-
-Action Items:
-
-- Speaker 2 to work on the architecture.
-- Team discussion on implementation details.
-- Schedule a follow-up meeting next week to review progress.
+<html>
+<head>
+    <title>Project Specs Meeting</title>
+</head>
+<body>
+    <h2>Items Discussed:</h2>
+    <ul>
+        <li>General catch-up on current workload.</li>
+        <li>Development of an AI-driven recommendation engine.</li>
+        <li>Use of a hybrid approach combining content-based and collaborative filtering.</li>
+        <li>Data sources: website, mobile app, email engagements, and demographic info.</li>
+        <li>Tech stack: TensorFlow for model training, Apache Kafka for data streaming, React for web UI, and Flutter for mobile UI.</li>
+        <li>Display recommendations in a carousel format similar to Netflix.</li>
+        <li>Implementation of a feedback loop and A/B testing.</li>
+        <li>Timeline estimate for MVP: three months, starting with a smaller user base.</li>
+    </ul>
+    <br>
+    <h2>Followups:</h2>
+    <ul>
+        <li>Speaker 2 to work on the architecture.</li>
+        <li>Team discussion on implementation details.</li>
+        <li>Schedule a follow-up meeting next week to review progress.</li>
+    </ul>
+</body>
+</html>
 ```

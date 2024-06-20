@@ -1,5 +1,6 @@
 import argparse
 import os
+from openai import OpenAI
 from datetime import datetime, timedelta
 from queue import Queue
 from subprocess import PIPE, Popen
@@ -17,15 +18,29 @@ PROMPTS_DIR = "prompts"
 
 
 def create_summary(transcript, model_name, summary_prompt_name):
-    model_path = f"{MODELS_DIR}/{model_name}"
-    if not os.path.exists(model_path):
-        raise Exception(f"No model found at {model_path}")
-    
+
     prompt_path = f"{PROMPTS_DIR}/{summary_prompt_name}"
     if not os.path.exists(prompt_path):
         raise Exception(f"No prompt found at {prompt_path}")
     with open(prompt_path, "r") as f:
         system_prompt = f.read()
+
+    if model_name.startswith("gpt"):
+        client = OpenAI()
+        completion = client.chat.completions.create(
+            model=model_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Summarize these meeting notes: {transcript}"}
+            ]
+        )
+        return completion.choices[0].message.content
+    print("now here")
+    
+    model_path = f"{MODELS_DIR}/{model_name}"
+    if not os.path.exists(model_path):
+        raise Exception(f"No model found at {model_path}")
+    
 
     llm = Llama(
         model_path=model_path,
@@ -37,10 +52,7 @@ def create_summary(transcript, model_name, summary_prompt_name):
 
     completion = llm.create_chat_completion(
         messages=[
-            {
-                "role": "system",
-                "content": system_prompt,
-            },
+            {"role": "system","content": system_prompt},
             {"role": "user", "content": f"Summarize these meeting notes: {transcript}"},
         ]
     )
@@ -113,7 +125,7 @@ def main():
     )
     parser.add_argument(
         "--llm_model",
-        default="Meta-Llama-3-8B-Instruct.Q2_K.gguf",
+        default="gpt-4o",
         help="LLM model to use for summarization.",
         type=str,
     )
