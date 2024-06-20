@@ -1,6 +1,6 @@
 # NomoNotes
 
-NomoNotes is a powerful tool designed to streamline your note-taking process during meetings, podcasts, and other audio sessions. It transcribes audio in real-time, summarizes the transcript using a language model, and saves the summary directly into Apple Notes.
+NomoNotes is a tool designed to streamline your note-taking process during meetings, lectures, podcasts etc. It transcribes audio in real-time, summarizes the transcript using a language model, and saves the summary directly into Apple Notes.
 
 ## Features
 
