@@ -13,37 +13,36 @@ import torch
 import whisper
 from llama_cpp import Llama
 
-MODELS_DIR = "models"
 PROMPTS_DIR = "prompts"
 
 
-def create_summary(transcript, model_name, summary_prompt_name):
-
+def create_summary(transcript, model, summary_prompt_name):
     prompt_path = f"{PROMPTS_DIR}/{summary_prompt_name}"
     if not os.path.exists(prompt_path):
         raise Exception(f"No prompt found at {prompt_path}")
     with open(prompt_path, "r") as f:
         system_prompt = f.read()
 
-    if model_name.startswith("gpt"):
+    if not model.endswith(".gguf"):
         client = OpenAI()
         completion = client.chat.completions.create(
-            model=model_name,
+            model=model,
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": f"Summarize these meeting notes: {transcript}"}
-            ]
+                {
+                    "role": "user",
+                    "content": f"Summarize these meeting notes: {transcript}",
+                },
+            ],
         )
         return completion.choices[0].message.content
     print("now here")
-    
-    model_path = f"{MODELS_DIR}/{model_name}"
-    if not os.path.exists(model_path):
-        raise Exception(f"No model found at {model_path}")
-    
+
+    if not os.path.exists(model):
+        raise Exception(f"No model found at {model}")
 
     llm = Llama(
-        model_path=model_path,
+        model_path=model,
         n_ctx=30000,
         n_threads=8,
         n_gpu_layers=35,
@@ -52,11 +51,11 @@ def create_summary(transcript, model_name, summary_prompt_name):
 
     completion = llm.create_chat_completion(
         messages=[
-            {"role": "system","content": system_prompt},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Summarize these meeting notes: {transcript}"},
         ]
     )
-    return completion['choices'][0]['message']['content']
+    return completion["choices"][0]["message"]["content"]
 
 
 def create_apple_note(folder_name, note_title, transcript):
@@ -90,7 +89,6 @@ def create_apple_note(folder_name, note_title, transcript):
     p.communicate()
 
     return
-
 
 
 def main():
@@ -141,7 +139,7 @@ def main():
         help="Name of the folder where the note will be created.",
         type=str,
     )
-    
+
     if "linux" in platform:
         parser.add_argument(
             "--default_microphone",
@@ -265,7 +263,6 @@ def main():
         except KeyboardInterrupt:
             break
 
-
     full_transcript = "\n".join(transcription)
     meeting_title = f"Meeting {datetime.now().strftime('%Y-%m-%d %H:%M')}"
 
@@ -273,7 +270,7 @@ def main():
     os.makedirs("transcripts", exist_ok=True)
     transcript_path = f"transcripts/{meeting_title}.txt"
     with open(transcript_path, "w") as f:
-        f.write(full_transcript)        
+        f.write(full_transcript)
         print(f"Saved transcript to {f.name}")
 
     summary = create_summary(full_transcript, args.llm_model, args.summary_prompt)
