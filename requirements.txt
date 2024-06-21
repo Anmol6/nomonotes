@@ -5,4 +5,5 @@ torch
 numpy
 git+https://github.com/openai/whisper.git
 llama_cpp_python
-
+anthropic
+openai
