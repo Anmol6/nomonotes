@@ -23,6 +23,7 @@ NomoNotes is a tool designed to streamline your note-taking process during meeti
 
 Run the script with the following command:
     `python transcribe.py --model medium --llm_model gpt-4o --summary_prompt meeting_prompt --notes_folder_name "NOMO Notes"`
+To end the transcription, just keyboard interrupt the process. The script will then start generating your summary and save it to Apple Notes.
 
 ### Command Line Arguments
 

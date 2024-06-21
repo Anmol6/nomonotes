@@ -1,17 +1,18 @@
 import argparse
 import os
-from openai import OpenAI
 from datetime import datetime, timedelta
 from queue import Queue
 from subprocess import PIPE, Popen
 from sys import platform
 from time import sleep
 
+import anthropic
 import numpy as np
 import speech_recognition as sr
 import torch
 import whisper
 from llama_cpp import Llama
+from openai import OpenAI
 
 PROMPTS_DIR = "prompts"
 
@@ -22,21 +23,37 @@ def create_summary(transcript, model, summary_prompt_name):
         raise Exception(f"No prompt found at {prompt_path}")
     with open(prompt_path, "r") as f:
         system_prompt = f.read()
-
     if not model.endswith(".gguf"):
-        client = OpenAI()
-        completion = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {
-                    "role": "user",
-                    "content": f"Summarize these meeting notes: {transcript}",
-                },
-            ],
-        )
-        return completion.choices[0].message.content
-    print("now here")
+        if "gpt" in model:
+            client = OpenAI()
+            completion = client.chat.completions.create(
+                model=model,
+                temperature=0.0,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {
+                        "role": "user",
+                        "content": f"Summarize these meeting notes: {transcript}",
+                    },
+                ],
+            )
+            return completion.choices[0].message.content
+        if "claude" in model:
+            client = anthropic.Anthropic()
+            message = client.messages.create(
+                model=model,
+                temperature=0.0,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {
+                        "role": "user",
+                        "content": f"Summarize these meeting notes: {transcript}",
+                    },
+                ],
+            )
+            return message.content
+        else:
+            raise Exception(f"Model {model} not supported")
 
     if not os.path.exists(model):
         raise Exception(f"No model found at {model}")
