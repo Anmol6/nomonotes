@@ -5,7 +5,7 @@ NomoNotes is a tool designed to streamline your note-taking process during meeti
 ## Features
 
 - **Real-time Audio Transcription**: Utilizes Whisper for accurate and efficient transcription (code from https://github.com/davabase/whisper_real_time)
-- **Summarization**: Summarizes the transcript using a language model (LLM).
+- **Summarization**: Summarizes the transcript using an LLM.
 - **Apple Notes Integration**:  Saves the summary into Apple Notes.
 
 ## Installation
