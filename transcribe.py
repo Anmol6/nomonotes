@@ -140,7 +140,7 @@ def main():
     )
     parser.add_argument(
         "--llm_model",
-        default="gpt-4o",
+        default="claude-3-5-sonnet-20240620",
         help="LLM model to use for summarization.",
         type=str,
     )
