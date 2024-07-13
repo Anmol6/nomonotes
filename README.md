@@ -38,6 +38,12 @@ To end the transcription, just keyboard interrupt the process. The script will t
 
     `python transcribe.py --model medium --llm_model gpt-4o --summary_prompt meeting_prompt --notes_folder_name "NOMO Notes"`
 
+### Streamlit
+
+If you prefer a UI, use streamlit:
+
+`python -m streamlit run ui.py`
+
 ## Use your own models
 
 You can use your own local models for summarization. For example, if you have a fine-tuned model that summarizes meetings and podcasts in a specific format, you can specify it using the `--llm_model` argument.
